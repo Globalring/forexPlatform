@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+"use strict";
+
+var child = require("child_process");
+var path = require("path");
+
+child.execSync("npm run electron", {
+    cwd: path.join(__dirname, "..")
+});

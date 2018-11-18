@@ -1,0 +1,11 @@
+Nov 18, 20:01:33 Argo listening on http://localhost:8000
+Nov 18, 20:01:33 Argo listening apis on http://localhost:8000/api
+Nov 18, 20:01:33 Argo streaming node online
+Nov 18, 20:34:01 ERROR putOrder The units specified contain more precision than is allowed for the Order's instrument
+Nov 18, 20:34:35 ERROR putOrder Invalid value specified for 'order.units'
+Nov 18, 20:35:19 ERROR putOrder The units specified contain more precision than is allowed for the Order's instrument
+Nov 18, 20:36:11 ERROR getAccounts 401 Unauthorized
+Nov 18, 20:37:40 ERROR putOrder The units specified contain more precision than is allowed for the Order's instrument
+Nov 18, 20:38:03 ERROR getAccounts 401 Unauthorized
+Nov 18, 20:38:04 ERROR putOrder The units specified contain more precision than is allowed for the Order's instrument
+Nov 18, 20:38:36 ERROR putOrder The units specified contain more precision than is allowed for the Order's instrument

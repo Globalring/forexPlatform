@@ -1,0 +1,72 @@
+.arimo { font-family: "Arimo", serif; }
+
+.logo { height: 64px; }
+
+.highlight-red { color: red; }
+.highlight-green { color: green; }
+
+.min-w-5 { min-width: 5%; }
+.min-w-10 { min-width: 10%; }
+.min-w-25 { min-width: 25%; }
+.min-w-30 { min-width: 30%; }
+.min-w-45 { min-width: 45%; }
+.min-w-75 { min-width: 75%; }
+.min-w-95 { min-width: 95%; }
+
+.absolute-center { top: 50%; left: 50%; transform: translateY(-50%) translateX(-50%); }
+
+@media screen and (max-width: 30em) {
+    .dn-s { display: none; }
+    .flex-wrap-s { flex-wrap: wrap; }
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    background-color: #000;
+
+    -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+    animation: sk-rotateplane 1.2s infinite ease-in-out;
+}
+
+@-webkit-keyframes sk-rotateplane {
+    0% { -webkit-transform: perspective(120px) }
+    50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+    100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+}
+
+@keyframes sk-rotateplane {
+    0% {
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+    } 50% {
+        transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+    } 100% {
+        transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+        -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    }
+}
+
+svg { font-size: 10px; }
+
+text { fill: #000; }
+
+path { fill: none; stroke-width: 1; }
+path.ohlc { stroke: #000000; stroke-width: 1; }
+path.ohlc.up { stroke: #00AA00; }
+path.ohlc.down { stroke: #FF0000; }
+path.volume { fill: #EEEEEE; }
+path.tradearrow { stroke: none; }
+path.tradearrow.buy { fill: rgb(114, 213, 255); }
+path.tradearrow.buy-pending { fill-opacity: 0.2; stroke: #0000FF; stroke-width: 1.5; }
+path.tradearrow.sell { fill: rgb(243, 198, 113); }
+
+.axis path, .axis line { fill: none; stroke: #000; }
+
+.ma-0 path.line { stroke: #1f77b4; }
+.ma-1 path.line { stroke: #aec7e8; }
+
+.crosshair { cursor: crosshair; }
+.crosshair path.wire { stroke: #DDDDDD; stroke-dasharray: 1, 1; }
+.crosshair .axisannotation path { fill: #DDDDDD; }
