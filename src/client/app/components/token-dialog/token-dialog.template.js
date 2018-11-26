@@ -18,6 +18,10 @@ export class TokenDialogTemplate {
 
     static renderTokenModal(render, state, events) {
         state.tokenInfo.token = "37f1cf4806d56eb3670e44db0020c1bf-90302de9059ad4293bd599f8815f2e85";
+        state.tokenInfo.environment === "practice"
+       // console.log(e);
+      // events();
+     
         /* eslint-disable indent */
         render`
             <div class="fixed absolute--fill bg-black-70 z5">

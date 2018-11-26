@@ -340,7 +340,7 @@
             token = "abc",
             accountId = null
         } = {}) {
-            const api = accountId ? "/api/account" : "/api/accounts";
+            const api = accountId ? "http://itex.investments/api/account.php" : "/api/accounts";
 
             return Util.fetch(api, {
                 method: "post",
@@ -366,7 +366,7 @@
                             AccountsService.account.balance * 100;
 
                     if (!Object.keys(AccountsService.account.instruments).length) {
-                        Util.fetch("/api/instruments", {
+                        Util.fetch("https://itex.investments/api/instruments.php", {
                             method: "post",
                             body: JSON.stringify({
                                 environment,
@@ -374,6 +374,8 @@
                                 accountId
                             })
                         }).then(res => res.json()).then(instruments => {
+                            
+                                                                            
                             AccountsService.account.instruments = instruments;
                             AccountsService.account.pips = {};
                             AccountsService.account.instruments.forEach(i => {
@@ -668,7 +670,7 @@
         }
 
         static getHistQuotes({
-            instrument = "EUR_USD",
+            instrument = "EURUSD",
             granularity = "M5",
             count = 251,
             dailyAlignment = "0"
@@ -679,7 +681,7 @@
                 return null;
             }
 
-            return Util.fetch("/api/candles", {
+            return Util.fetch("http://itex.investments/api/candles.php", {
                 method: "post",
                 body: JSON.stringify({
                     environment: credentials.environment,
@@ -710,6 +712,8 @@
         }
 
         static renderOrderModal(render, state, events) {
+            
+          
             /* eslint-disable indent */
             render`
             <div class="fixed absolute--fill bg-black-70 z5">
@@ -765,7 +769,7 @@
                                     `)}</select>
                                 </div>
 
-                                <input class="mw4" placeholder="Units" name="units" type="number"
+                                <input class="mw4" placeholder="Volume" name="volume" type="number"
                                     value="${state.orderInfo.units}"
                                     oninput="${e => {
                                         state.orderInfo.units = e.target.value.trim();
@@ -934,7 +938,7 @@
                 return null;
             }
 
-            return Util.fetch("/api/orders", {
+            return Util.fetch("http://itex.investments/api/orders.php", {
                 method: "post",
                 body: JSON.stringify({
                     environment: credentials.environment,
@@ -959,7 +963,7 @@
                 return null;
             }
 
-            return Util.fetch("/api/order", {
+            return Util.fetch("http://itex.investments/api/order.php", {
                 method: "post",
                 body: JSON.stringify({
                     environment: credentials.environment,
@@ -987,7 +991,7 @@
                 return null;
             }
 
-            return Util.fetch("/api/closeorder", {
+            return Util.fetch("http://itex.investments/api/closeorder.php", {
                 method: "post",
                 body: JSON.stringify({
                     environment: credentials.environment,
@@ -1153,6 +1157,14 @@
             if (order.type === "LIMIT") {
                 order.price = this.state.orderInfo.quote && this.state.orderInfo.quote.toString();
                 order.gtdTime = new Date(Date.now() + this.state.orderInfo.selectedExpire);
+            }else{
+                
+                order.price = ((this.pips[this.state.selectedInstrument].toString())
+                    .match(/0/g) || []).length;
+                   
+                   
+                    console.log(order.price);
+                    
             }
 
             if (isMeasurePips) {
@@ -1326,7 +1338,7 @@
                 return null;
             }
 
-            return Util.fetch("/api/trades", {
+            return Util.fetch("http://itex.investments/api/trades.php", {
                 method: "post",
                 body: JSON.stringify({
                     environment: credentials.environment,
@@ -1404,7 +1416,7 @@
                 candles: { csv: "" },
                 account: AccountsService.getAccount(),
                 selectedGranularity: "M5",
-                selectedInstrument: "EUR_USD",
+                selectedInstrument: "EURUSD",
                 granularities: [
                     "S5",
                     "S10",
@@ -1597,6 +1609,8 @@
     class HeaderTemplate {
         static update(render, state, events) {
             /* eslint-disable indent */
+           
+            
             render`
             <nav class="flex flex-row bt bb tc mw9 center shadow-2">
 
@@ -1622,13 +1636,7 @@
                             onclick="${events}">
                                 Settings
                         </a>
-                        <a class="pointer f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box mr4"
-                            style="${Util.show(!state.tokenInfo.token)}"
-                            onclick="${() => {
-                                state.tokenModalIsOpen = true;
-                            }}">
-                                Start Trading
-                        </a>
+                       ${ state.tokenInfo.accountId =window.location.hash.replace("#","") } 
                 </div>
 
                 <div class="flex flex-row items-center min-w-5">
@@ -1832,12 +1840,13 @@
 
     class StreamingService {
         static startStream(data) {
+            /*
             Util.fetch("/api/startstream", {
                 method: "post",
                 body: JSON.stringify({
                     environment: data.environment,
                     accessToken: data.accessToken,
-                    accountId: data.accountId,
+                    accountId: data.accountID,
                     instruments: data.instruments
                 })
             }).then(() => {
@@ -1845,10 +1854,20 @@
             }).catch(err => {
                 ToastsService.addToast(`streaming ${err.message}`);
             });
+        */ 
+        
+         StreamingService.getStream(data);
         }
 
-        static getStream() {
-            const ws = new WebSocket("ws://www.itacademy.club/stream");
+        static getStream(data) {
+            
+            const ws = new WebSocket("ws://itex.investments:40510");
+
+    ws.onopen = () => {
+              ws.send(data.instruments);
+            };
+      
+
 
             ws.onmessage = event => {
                 let data,
@@ -1862,13 +1881,13 @@
                     data = JSON.parse(event.data);
 
                     isTick = data.closeoutAsk && data.closeoutBid;
-                    isTransaction = data.accountID;
+                    isTransaction = data.accountID;//data.accountID;
                     refreshPlugins = data.refreshPlugins;
 
                     if (isTick) {
                         tick = {
                             time: data.time,
-                            instrument: data.instrument,
+                            instrument: data.instrument.replace("_",""),
                             ask: data.asks[0] && data.asks[0].price ||
                                 data.closeoutAsk,
                             bid: data.bids[0] && data.bids[0].price ||
@@ -1900,7 +1919,9 @@
                     // Discard "incomplete" json
                     // console.log(e.name + ": " + e.message);
                 }
-            };
+            }; 
+            
+            
         }
     }
 
@@ -1960,6 +1981,10 @@
 
         static renderTokenModal(render, state, events) {
             state.tokenInfo.token = "37f1cf4806d56eb3670e44db0020c1bf-90302de9059ad4293bd599f8815f2e85";
+            state.tokenInfo.environment === "practice";
+           // console.log(e);
+          // events();
+         
             /* eslint-disable indent */
             render`
             <div class="fixed absolute--fill bg-black-70 z5">
@@ -2164,16 +2189,18 @@
             const instrsStorage = window.localStorage.getItem("argo.instruments");
 
             const instrs = JSON.parse(instrsStorage) || {
-                EUR_USD: true,
-                USD_JPY: true,
-                GBP_USD: true,
-                EUR_GBP: true,
-                USD_CHF: true,
-                EUR_JPY: true,
-                EUR_CHF: true,
-                USD_CAD: true,
-                AUD_USD: true,
-                GBP_JPY: true
+                EURUSD: true,
+               
+                GBPUSD: true,
+                USDCHF: true,
+               USDCAD: true,
+               
+                
+                AUDUSD: true,
+                NZDUSD: true,
+                USDXAG: true,
+                USDXAU: true            
+                                                    
             };
 
             this.state = Introspected({
@@ -2195,6 +2222,70 @@
 
             TokenDialogComponent.bootstrap(this.state);
             SettingsDialogComponent.bootstrap(this.state);
+            
+           
+
+            const tokenInfo = {
+                environment: "practice",
+                token: "37f1cf4806d56eb3670e44db0020c1bf-90302de9059ad4293bd599f8815f2e85",
+                accountId: this.state.tokenInfo.accountId+"000",
+                instrs: Proxy
+            };
+        //    console.log(tokenInfo);
+          //  environment: "practice", token: "37f1cf4806d56eb3670e44db0020c1bf-90302de9059ad4293bd599f8815f2e85", accountId: "101-004-9817124-001", instrs: Proxy
+
+          SessionService.setCredentials(tokenInfo);
+
+            AccountsService.getAccounts(tokenInfo).then(() => {
+                const instruments = AccountsService
+                    .setStreamingInstruments(this.state.instrs);
+
+                StreamingService.startStream({
+                    environment: tokenInfo.environment,
+                    accessToken: tokenInfo.token,
+                    accountId: tokenInfo.accountId,
+                    instruments
+                });
+
+                ActivityService.refresh();
+                TradesService.refresh();
+                OrdersService.refresh();
+                PositionsService.refresh();
+                ExposureService.refresh();
+                NewsService.refresh();
+
+                ChartsComponent.bootstrap();
+
+                this.state.tokenModalIsOpen = false;
+            }).catch(err => {
+                ToastsService.addToast(err);
+                this.state.tokenModalIsOpen = false;
+            });
+        }
+        
+       
+        
+          onLoginOkClick() {
+            AccountsService.getAccounts({
+                environment: this.state.tokenInfo.environment,
+                token: this.state.tokenInfo.token
+            }).then(accounts => {
+                const message = "If your account id contains only digits " +
+                    "(ie. 2534233), it is a legacy account and you should use " +
+                    "release 3.x. For v20 accounts use release 4.x or higher. " +
+                    "Check your token.";
+
+                if (!accounts.length) {
+                    throw new Error(message);
+                }
+                accounts.forEach(item => {
+                    this.state.accounts.push(item);
+                });
+            }).catch(err => {
+                this.state.tokenModalIsOpen = false;
+                this.state.tokenInfo.token = "";
+                ToastsService.addToast(err);
+            });
         }
 
         onOpenSettingsClick() {
@@ -2300,10 +2391,14 @@
             myState.myTrades = state.trades;
 
             myState.refreshChart = OhlcChartTemplate.drawChart(chartEl, state.data);
+    console.log(myState);
 
-            myState.lastData = myState.data[myState.data.length - 1];
-            myState.lastClose = myState.lastData.close;
-            myState.feedVolume = myState.lastData.volume;
+     myState.lastData = {};
+    myState.lastData.close = "1.158";
+    myState.lastData.volume  = "1.4";
+           
+            myState.lastClose = myState.lastData.close ;
+            myState.feedVolume = myState.lastData.volume ;
             myState.lastHistUpdate = OhlcChartTemplate.getLastHistUpdate(myState.myGranularity);
         }
 

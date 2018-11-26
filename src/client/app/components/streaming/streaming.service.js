@@ -10,12 +10,13 @@ import { Util } from "../../util.js";
 
 export class StreamingService {
     static startStream(data) {
+        /*
         Util.fetch("/api/startstream", {
             method: "post",
             body: JSON.stringify({
                 environment: data.environment,
                 accessToken: data.accessToken,
-                accountId: data.accountId,
+                accountId: data.accountID,
                 instruments: data.instruments
             })
         }).then(() => {
@@ -23,10 +24,20 @@ export class StreamingService {
         }).catch(err => {
             ToastsService.addToast(`streaming ${err.message}`);
         });
+    */ 
+    
+     StreamingService.getStream(data);
     }
 
-    static getStream() {
-        const ws = new WebSocket("ws://www.itacademy.club/stream");
+    static getStream(data) {
+        
+        const ws = new WebSocket("ws://itex.investments:40510");
+
+ws.onopen = () => {
+          ws.send(data.instruments);
+        };
+  
+
 
         ws.onmessage = event => {
             let data,
@@ -40,13 +51,13 @@ export class StreamingService {
                 data = JSON.parse(event.data);
 
                 isTick = data.closeoutAsk && data.closeoutBid;
-                isTransaction = data.accountID;
+                isTransaction = data.accountID;//data.accountID;
                 refreshPlugins = data.refreshPlugins;
 
                 if (isTick) {
                     tick = {
                         time: data.time,
-                        instrument: data.instrument,
+                        instrument: data.instrument.replace("_",""),
                         ask: data.asks[0] && data.asks[0].price ||
                             data.closeoutAsk,
                         bid: data.bids[0] && data.bids[0].price ||
@@ -78,6 +89,8 @@ export class StreamingService {
                 // Discard "incomplete" json
                 // console.log(e.name + ": " + e.message);
             }
-        };
+        }; 
+        
+        
     }
 }

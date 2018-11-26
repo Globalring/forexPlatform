@@ -10,7 +10,7 @@ export class ChartsService {
     }
 
     static getHistQuotes({
-        instrument = "EUR_USD",
+        instrument = "EURUSD",
         granularity = "M5",
         count = 251,
         dailyAlignment = "0"
@@ -21,7 +21,7 @@ export class ChartsService {
             return null;
         }
 
-        return Util.fetch("/api/candles", {
+        return Util.fetch("http://itex.investments/api/candles.php", {
             method: "post",
             body: JSON.stringify({
                 environment: credentials.environment,

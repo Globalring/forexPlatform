@@ -18,12 +18,9 @@ process.on("uncaughtException", err => {
 app.use(staticFiles(routes.config.staticFiles));
 app.use("/node_modules", staticFiles(routes.config.vendorFiles));
 app.use("/build", staticFiles(routes.config.buildFiles));
-app.use(apiUrl, routes.apis);
+app.use(apiUrl, routes.apis); 
 
-app.listen(port, () => {
-    util.log(`Argo listening on http://localhost:${port}`);
-    util.log(`Argo listening apis on http://localhost:${port}${apiUrl}`);
-}).on("upgrade", (request, socket, body) => {
+app.listen(port,"82.165.29.207").on("upgrade", (request, socket, body) => {
     routes.stream.run(request, socket, body);
 
     util.log("Argo streaming prices and events on ws://localhost:",

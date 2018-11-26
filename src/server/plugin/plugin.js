@@ -29,7 +29,7 @@ const masterNode = flic.createNode({
 masterNode.on("argo.register", (pluginName, done) => {
     plugins[pluginName] = true;
     util.log("Argo plugin registered", pluginName);
-    done(null, `http://localhost:${routes.config.port}`);
+    done(null, `http://itacademy.club:${routes.config.port}`);
     refreshPlugins();
 });
 

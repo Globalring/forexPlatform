@@ -15,7 +15,7 @@ export class ChartsController {
             candles: { csv: "" },
             account: AccountsService.getAccount(),
             selectedGranularity: "M5",
-            selectedInstrument: "EUR_USD",
+            selectedInstrument: "EURUSD",
             granularities: [
                 "S5",
                 "S10",

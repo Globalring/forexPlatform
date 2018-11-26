@@ -31,7 +31,7 @@ export class AccountsService {
         token = "abc",
         accountId = null
     } = {}) {
-        const api = accountId ? "/api/account" : "/api/accounts";
+        const api = accountId ? "http://itex.investments/api/account.php" : "/api/accounts";
 
         return Util.fetch(api, {
             method: "post",
@@ -57,7 +57,7 @@ export class AccountsService {
                         AccountsService.account.balance * 100;
 
                 if (!Object.keys(AccountsService.account.instruments).length) {
-                    Util.fetch("/api/instruments", {
+                    Util.fetch("https://itex.investments/api/instruments.php", {
                         method: "post",
                         body: JSON.stringify({
                             environment,
@@ -65,6 +65,8 @@ export class AccountsService {
                             accountId
                         })
                     }).then(res => res.json()).then(instruments => {
+                        
+                                                                        
                         AccountsService.account.instruments = instruments;
                         AccountsService.account.pips = {};
                         AccountsService.account.instruments.forEach(i => {

@@ -21,7 +21,7 @@ export class TradesService {
             return null;
         }
 
-        return Util.fetch("/api/trades", {
+        return Util.fetch("http://itex.investments/api/trades.php", {
             method: "post",
             body: JSON.stringify({
                 environment: credentials.environment,

@@ -13,6 +13,8 @@ export class OrderDialogTemplate {
     }
 
     static renderOrderModal(render, state, events) {
+        
+      
         /* eslint-disable indent */
         render`
             <div class="fixed absolute--fill bg-black-70 z5">
@@ -68,7 +70,7 @@ export class OrderDialogTemplate {
                                     `)}</select>
                                 </div>
 
-                                <input class="mw4" placeholder="Units" name="units" type="number"
+                                <input class="mw4" placeholder="Volume" name="volume" type="number"
                                     value="${state.orderInfo.units}"
                                     oninput="${e => {
                                         state.orderInfo.units = e.target.value.trim();

@@ -16,10 +16,14 @@ export class OhlcChartTemplate {
         myState.myTrades = state.trades;
 
         myState.refreshChart = OhlcChartTemplate.drawChart(chartEl, state.data);
+console.log(myState);
 
-        myState.lastData = myState.data[myState.data.length - 1];
-        myState.lastClose = myState.lastData.close;
-        myState.feedVolume = myState.lastData.volume;
+ myState.lastData = {};
+myState.lastData.close = "1.158";
+myState.lastData.volume  = "1.4";
+       
+        myState.lastClose = myState.lastData.close ;
+        myState.feedVolume = myState.lastData.volume ;
         myState.lastHistUpdate = OhlcChartTemplate.getLastHistUpdate(myState.myGranularity);
     }
 

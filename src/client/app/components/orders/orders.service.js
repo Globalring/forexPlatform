@@ -21,7 +21,7 @@ export class OrdersService {
             return null;
         }
 
-        return Util.fetch("/api/orders", {
+        return Util.fetch("http://itex.investments/api/orders.php", {
             method: "post",
             body: JSON.stringify({
                 environment: credentials.environment,
@@ -46,7 +46,7 @@ export class OrdersService {
             return null;
         }
 
-        return Util.fetch("/api/order", {
+        return Util.fetch("http://itex.investments/api/order.php", {
             method: "post",
             body: JSON.stringify({
                 environment: credentials.environment,
@@ -74,7 +74,7 @@ export class OrdersService {
             return null;
         }
 
-        return Util.fetch("/api/closeorder", {
+        return Util.fetch("http://itex.investments/api/closeorder.php", {
             method: "post",
             body: JSON.stringify({
                 environment: credentials.environment,

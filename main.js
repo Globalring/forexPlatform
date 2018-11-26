@@ -24,7 +24,7 @@ function createWindow() {
     });
 
     const indexFile = process.argv[2] || "index.html";
-    const url = `http://localhost:8000/${indexFile}`;
+    const url = `http://itacademy.club:8000/${indexFile}`;
 
     mainWindow.loadURL(url);
 }

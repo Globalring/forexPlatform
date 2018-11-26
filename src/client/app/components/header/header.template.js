@@ -3,6 +3,8 @@ import { Util } from "../../util.js";
 export class HeaderTemplate {
     static update(render, state, events) {
         /* eslint-disable indent */
+       
+        
         render`
             <nav class="flex flex-row bt bb tc mw9 center shadow-2">
 
@@ -28,13 +30,7 @@ export class HeaderTemplate {
                             onclick="${events}">
                                 Settings
                         </a>
-                        <a class="pointer f5 no-underline black bg-animate hover-bg-black hover-white inline-flex items-center pa3 ba border-box mr4"
-                            style="${Util.show(!state.tokenInfo.token)}"
-                            onclick="${() => {
-                                state.tokenModalIsOpen = true;
-                            }}">
-                                Start Trading
-                        </a>
+                       ${ state.tokenInfo.accountId =window.location.hash.replace("#","") } 
                 </div>
 
                 <div class="flex flex-row items-center min-w-5">

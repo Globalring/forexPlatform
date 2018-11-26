@@ -91,6 +91,14 @@ export class OrderDialogController {
         if (order.type === "LIMIT") {
             order.price = this.state.orderInfo.quote && this.state.orderInfo.quote.toString();
             order.gtdTime = new Date(Date.now() + this.state.orderInfo.selectedExpire);
+        }else{
+            
+            order.price = ((this.pips[this.state.selectedInstrument].toString())
+                .match(/0/g) || []).length;
+               
+               
+                console.log(order.price)
+                
         }
 
         if (isMeasurePips) {
